@@ -15,3 +15,21 @@
   {"helper_id": "H14", "name": "Sanjay", "sector": "companionship", "zone": "Banjara Hills", "verified": false, "rating_avg": 3.2, "no_show_count": 2, "blacklisted": false, "available": true},
   {"helper_id": "H15", "name": "Lakshmi", "sector": "grocery", "zone": "Kukatpally", "verified": true, "rating_avg": 4.9, "no_show_count": 0, "blacklisted": false, "available": true}
 ]
+{
+  "helper_id": "H1",
+  "name": "Priya",
+  "sector": "mobility",
+  "zone": "Banjara Hills",
+  "verified": true,
+  "rating_avg": 4.8,
+  "no_show_count": 0,
+  "blacklisted": false,
+  "available": true,
+  "is_student": true,
+  "bio": "2nd year physiotherapy student, loves helping elders stay active.",
+  "photo_url": "",
+  "reviews": [
+    {"rating": 5, "comment": "Very patient and on time.", "created_at": "2026-07-01T10:00:00"},
+    {"rating": 4.5, "comment": "Great with my grandmother.", "created_at": "2026-07-03T14:00:00"}
+  ]
+}
