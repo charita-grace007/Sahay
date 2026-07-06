@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sahay — Smart Matching</title>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; background: #f7f7f9; }
+  h1 { color: #d6336c; }
+  label { display: block; margin-top: 15px; font-weight: bold; }
+  select, input { width: 100%; padding: 8px; margin-top: 5px; border-radius: 6px; border: 1px solid #ccc; }
+  button { margin-top: 20px; padding: 12px 20px; background: #d6336c; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; }
+  button:hover { background: #b02555; }
+  #result { margin-top: 25px; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); white-space: pre-wrap; }
+  .match { padding: 10px; border-bottom: 1px solid #eee; }
+</style>
+</head>
+<body>
+  <h1>Sahay — Smart Matching</h1>
+  <p>Request a helper and see who gets matched, and why.</p>
+
+  <label>Sector needed</label>
+  <select id="sector">
+    <option value="mobility">Mobility</option>
+    <option value="medical">Medical</option>
+    <option value="grocery">Grocery</option>
+    <option value="companionship">Companionship</option>
+  </select>
+
+  <label>Zone</label>
+  <select id="zone">
+    <option value="Banjara Hills">Banjara Hills</option>
+    <option value="Jubilee Hills">Jubilee Hills</option>
+    <option value="Madhapur">Madhapur</option>
+    <option value="Kukatpally">Kukatpally</option>
+  </select>
+
+  <label>Urgency</label>
+  <select id="urgency">
+    <option value="high">High</option>
+    <option value="medium">Medium</option>
+    <option value="low">Low</option>
+  </select>
+
+  <button onclick="findMatch()">Find a Helper</button>
+
+  <div id="result" style="display:none;"></div>
+
+  <script>
+    // IMPORTANT: replace this with your actual Render URL once it's live
+    const API_URL = "https://sahay-backend.onrender.com/match";
+
+    async function findMatch() {
+      const resultBox = document.getElementById("result");
+      resultBox.style.display = "block";
+      resultBox.innerText = "Searching for the best match...";
+
+      const payload = {
+        sector_needed: document.getElementById("sector").value,
+        zone: document.getElementById("zone").value,
+        urgency: document.getElementById("urgency").value
+      };
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (!data.matches || data.matches.length === 0) {
+          resultBox.innerText = data.message || "No helpers found.";
+          return;
+        }
+
+        let html = "<strong>Top Matches:</strong><br><br>";
+        data.matches.forEach((m, i) => {
+          html += `<div class="match">${i + 1}. <b>${m.name}</b> — ${m.zone}, ${m.rating}★, ${m.verified ? "verified" : "not verified"} (score: ${m.score})</div>`;
+        });
+        html += `<br><strong>AI Explanation:</strong><br>${data.top_match_explanation}`;
+        resultBox.innerHTML = html;
+      } catch (err) {
+        resultBox.innerText = "Error reaching the backend: " + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
